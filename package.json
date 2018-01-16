@@ -1,12 +1,11 @@
 {
   "version": "1.16.5",
-  "name": "httpsnippet",
+  "name": "httpsnippet-fe",
   "description": "HTTP Request snippet generator for *most* languages",
   "author": "Ahmad Nassri <ahmad@mashape.com> (https://www.mashape.com/)",
-  "homepage": "https://github.com/Mashape/httpsnippet",
+  "homepage": "https://github.com/youwi/httpsnippet-fe",
   "license": "MIT",
   "main": "src/index.js",
-  "bin": "bin/httpsnippet",
   "keywords": [
     "api",
     "clojure",
@@ -39,12 +38,12 @@
     "node": ">=0.10"
   },
   "files": [
-    "bin",
-    "src"
+    "src",
+    "dist"
   ],
-  "repository": "Mashape/httpsnippet",
+  "repository": "youwi/httpsnippet-fe",
   "bugs": {
-    "url": "https://github.com/Mashape/httpsnippet/issues"
+    "url": "https://github.com/youwi/httpsnippet-fe/issues"
   },
   "scripts": {
     "quick": "mocha --no-timeouts --fgrep 'Request Validation' --invert",
@@ -74,9 +73,7 @@
     "mocha": "^2.3.4",
     "require-directory": "^2.1.1",
     "should": "^7.1.1",
-    "standard": "^10.0.2"
-  },
-  "dependencies": {
+    "standard": "^10.0.2",
     "chalk": "^1.1.1",
     "commander": "^2.9.0",
     "debug": "^2.2.0",
@@ -86,5 +83,8 @@
     "fs-writefile-promise": "^1.0.3",
     "har-validator": "^5.0.0",
     "pinkie-promise": "^2.0.0"
+  },
+  "dependencies": {
+
   }
 }

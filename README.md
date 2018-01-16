@@ -26,8 +26,6 @@ See it in action on companion service: [APIembed](https://apiembed.com/)
 ## Install
 
 ```shell
-# to use in cli
-npm install --global httpsnippet
 
 # to use as a module
 npm install --save httpsnippet
@@ -35,47 +33,6 @@ npm install --save httpsnippet
 
 ## Usage
 
-```
-
-  Usage: httpsnippet [options] <file>
-
-  Options:
-
-    -h, --help                output usage information
-    -V, --version             output the version number
-    -t, --target <target>     target output
-    -c, --client [client]     target client library
-    -o, --output <directory>  write output to directory
-
-```
-
-###### Example
-
-process single file: [`example.json`](test/fixtures/requests/full.json) in [HAR Request Object](http://www.softwareishard.com/blog/har-12-spec/#request) format, or full [HAR](http://www.softwareishard.com/blog/har-12-spec/#log) log format:
-
-```shell
-httpsnippet example.json --target node --client unirest --output ./snippets
-```
-
-```shell
-$ tree snippets
-snippets/
-└── example.js
-```
-
-process multiple files:
-
-```shell
-httpsnippet ./*.json --target node --client request --output ./snippets
-```
-
-```shell
-$ tree snippets/
-snippets/
-├── endpoint-1.js
-├── endpoint-2.js
-└── endpoint-3.js
-```
 
 ## API
 
