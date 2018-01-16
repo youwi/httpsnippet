@@ -1,4 +1,5 @@
 'use strict'
+var util=require("./util");
 
 /**
  * Helper object to format and aggragate lines of code.

@@ -13,6 +13,7 @@
 var CodeBuilder = require('../../helpers/code-builder')
 
 module.exports = function (source, options) {
+  console.log("---")
   var code = new CodeBuilder()
   // Start Request
   code.push('import http.client')

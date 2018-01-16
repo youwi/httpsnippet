@@ -5,8 +5,8 @@ var es = require('event-stream')
 var MultiPartForm = require('form-data')
 var qs = require('querystring')
 var reducer = require('./helpers/reducer')
-var targets = require('../test/targets')
 var url = require('url')
+var targets = require('./targets')
 
 // constructor
 var HTTPSnippet = function (data) {
@@ -38,6 +38,7 @@ var HTTPSnippet = function (data) {
     entry.request.bodySize = 0
     entry.request.headersSize = 0
     entry.request.postData.size = 0
+    self.requests.push(self.prepare(entry.request))
   })
 }
 

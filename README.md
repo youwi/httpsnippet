@@ -1,4 +1,14 @@
 # HTTP Snippet [![version][npm-version]][npm-url] [![License][npm-license]][license-url]
+##### what change from https://github.com/Kong/httpsnippet
+- brower surport,chrome,firefox,just use webpack.
+    
+      webpack src/index.js dist/httpsnippet-dist.js
+  
+- for node.js
+      
+      webpack src/index.js dist/httpsnippet-dist-node.js --target node 
+  
+
 
 > HTTP Request snippet generator for *many* languages & tools including: `cURL`, `HTTPie`, `Javascript`, `Node`, `C`, `Java`, `PHP`, `Objective-C`, `Swift`, `Python`, `Ruby`, `C#`, `Go`, `OCaml` and [more](https://github.com/Mashape/httpsnippet/wiki/Targets)!
 
