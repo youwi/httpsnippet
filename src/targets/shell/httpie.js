@@ -10,12 +10,11 @@
 
 'use strict'
 
-var util = require('util')
 var shell = require('../../helpers/shell')
 var CodeBuilder = require('../../helpers/code-builder')
 
 module.exports = function (source, options) {
-  var opts = util._extend({
+  var opts = Object.assign({
     body: false,
     cert: false,
     headers: false,

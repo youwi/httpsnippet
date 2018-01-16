@@ -4,9 +4,8 @@
 
 var fixtures = require('./fixtures')
 var HTTPSnippet = require('../src')
-var targets = require('../src/targets')
+var targets = require('./targets')
 var shell = require('child_process')
-var util = require('util')
 
 require('should')
 

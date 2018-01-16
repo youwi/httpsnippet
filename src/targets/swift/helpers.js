@@ -1,6 +1,5 @@
 'use strict'
 
-var util = require('util')
 
 /**
  * Create an string of given length filled with blank spaces

@@ -5,16 +5,14 @@ var es = require('event-stream')
 var MultiPartForm = require('form-data')
 var qs = require('querystring')
 var reducer = require('./helpers/reducer')
-var targets = require('./targets')
+var targets = require('../test/targets')
 var url = require('url')
-var util = require('util')
-var validate = require('har-validator/lib/async')
 
 // constructor
 var HTTPSnippet = function (data) {
   var entries
   var self = this
-  var input = util._extend({}, data)
+  var input = Object.assign({}, data)
 
   // prep the main container
   self.requests = []
@@ -40,14 +38,6 @@ var HTTPSnippet = function (data) {
     entry.request.bodySize = 0
     entry.request.headersSize = 0
     entry.request.postData.size = 0
-
-    validate.request(entry.request, function (err, valid) {
-      if (!valid) {
-        throw err
-      }
-
-      self.requests.push(self.prepare(entry.request))
-    })
   })
 }
 
@@ -156,13 +146,13 @@ HTTPSnippet.prototype.prepare = function (request) {
   }
 
   // create allHeaders object
-  request.allHeaders = util._extend(request.allHeaders, request.headersObj)
+  request.allHeaders = Object.assign(request.allHeaders, request.headersObj)
 
   // deconstruct the uri
   request.uriObj = url.parse(request.url, true, true)
 
   // merge all possible queryString values
-  request.queryObj = util._extend(request.queryObj, request.uriObj.query)
+  request.queryObj = Object.assign(request.queryObj, request.uriObj.query)
 
   // reset uriObj values for a clean url
   request.uriObj.query = null
@@ -224,7 +214,7 @@ module.exports = HTTPSnippet
 
 module.exports.availableTargets = function () {
   return Object.keys(targets).map(function (key) {
-    var target = util._extend({}, targets[key].info)
+    var target = Object.assign({}, targets[key].info)
     var clients = Object.keys(targets[key])
 
       .filter(function (prop) {

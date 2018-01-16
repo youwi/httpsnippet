@@ -2,13 +2,13 @@
 
 'use strict'
 
-var fixtures = require('./fixtures')
+var fixtures = require('./fixtures/index')
 var fs = require('fs')
 var glob = require('glob')
-var HTTPSnippet = require('../src')
+var HTTPSnippet = require('../src/index')
 var path = require('path')
 var should = require('should')
-var targets = require('../src/targets')
+var targets = require('../src/targets/index')
 
 var base = './test/fixtures/output/'
 

@@ -1,7 +1,5 @@
 'use strict'
 
-var util = require('util')
-
 /**
  * Helper object to format and aggragate lines of code.
  * Lines are aggregated in a `code` array, and need to be joined to obtain a proper code snippet.
