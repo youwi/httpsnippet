@@ -2,11 +2,11 @@
 ##### what change from https://github.com/Kong/httpsnippet
 - brower surport,chrome,firefox,just use webpack.
     
-      webpack src/index.js dist/httpsnippet-dist.js
+      webpack src/index.js dist/httpsnippet-dist.js --output-library HTTPSnippet  --output-library-target assign
   
 - for node.js
       
-      webpack src/index.js dist/httpsnippet-dist-node.js --target node 
+      webpack src/index.js dist/httpsnippet-dist-node.js --target node   --output-library HTTPSnippet --output-library-target assign
   
 
 
