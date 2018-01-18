@@ -18,11 +18,14 @@ module.exports = function (source, options) {
   var code = new CodeBuilder('    ')
 
   // Import requests
-  code.push('import requests')
-      .blank()
+  // code.push('from Suites.HttpClient import HttpClient')
+  //     .blank()
+  // code.push('def test_at(time):')
+  //   .blank()
 
-  // Set URL
-  code.push('url = "%s"', source.url)
+
+  // Set URL URL_BASE_CRM + SwaggerURL.bind("/specialEvent/copy/1")
+  code.push('url = BASE_URL + SwaggerURL.bind("%s")', source.url)
       .blank()
 
   // Construct query string
@@ -35,9 +38,10 @@ module.exports = function (source, options) {
 
   // Construct payload
   var payload = JSON.stringify(source.postData.text)
+  var jsonData= parsedText(source.postData.text)
 
   if (payload) {
-    code.push('payload = %s', payload)
+    code.push('json = %s', jsonData)
   }
 
   // Construct headers
@@ -51,28 +55,28 @@ module.exports = function (source, options) {
           .blank()
     }
   } else if (headerCount > 1) {
-    var count = 1
-
-    code.push('headers = {')
-
-    for (header in headers) {
-      if (count++ !== headerCount) {
-        code.push(1, '\'%s\': "%s",', header, headers[header])
-      } else {
-        code.push(1, '\'%s\': "%s"', header, headers[header])
-      }
-    }
-
-    code.push(1, '}')
-        .blank()
+    // var count = 1
+    //
+     code.push('headers = LOGIN_HEADERS')
+    //
+    // for (header in headers) {
+    //   if (count++ !== headerCount) {
+    //     code.push(1, '\'%s\': "%s",', header, headers[header])
+    //   } else {
+    //     code.push(1, '\'%s\': "%s"', header, headers[header])
+    //   }
+    // }
+    //
+    // code.push(1, '}')
+    //     .blank()
   }
 
   // Construct request
   var method = source.method
-  var request = util.format('response = requests.request("%s", url', method)
+  var request = util.format('response = HttpClient.client.request("%s", url', method)
 
   if (payload) {
-    request += ', data=payload'
+    request += ', json=json'
   }
 
   if (headerCount > 0) {
@@ -102,3 +106,12 @@ module.exports.info = {
 }
 
 // response = requests.request("POST", url, data=payload, headers=headers, params=querystring)
+function  parsedText(text) {
+  try{
+    if(text!=null){
+      return JSON.stringify(JSON.parse(text),0,4)
+    }
+  }catch (e){
+    return text
+  }
+}
