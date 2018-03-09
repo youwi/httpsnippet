@@ -10,5 +10,7 @@ module.exports = {
 
   python3: require('./python3'),
   requests: require('./requests'),
-  requestMini:require("./requests-mini")
+  requestMini:require("./requests-mini"),
+  simple:require("./simple-post")
+
 }
