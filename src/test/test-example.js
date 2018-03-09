@@ -1,4 +1,4 @@
-var HTTPSnippet2 = require('./src/index');
+var HTTPSnippet2 = require('../index');
 
 var snippet = new HTTPSnippet2({
   method: 'GET',
@@ -11,7 +11,7 @@ console.log(snippet.convert('python', "requestsMini"))
 //console.log(snippet.convert('javascript'))
 
 
-require('./dist/httpsnippet-dist-node');
+require('../../dist/httpsnippet-dist-node');
 
 snippet = new HTTPSnippet({
   method: 'GET',

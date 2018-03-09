@@ -1,6 +1,6 @@
 
 
-var HTTPSnippet = require('./index.js');
+var HTTPSnippet = require('../index.js');
 
 
 var snippet = new HTTPSnippet({

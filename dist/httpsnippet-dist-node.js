@@ -1,4 +1,3 @@
-HTTPSnippet =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -70,7 +69,7 @@ HTTPSnippet =
 
 "use strict";
 
-var util=__webpack_require__(4);
+var util=__webpack_require__(2);
 
 /**
  * Helper object to format and aggragate lines of code.
@@ -181,126 +180,6 @@ module.exports = require("stream");
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports) {
-
-module.exports = require("util");
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Stream = __webpack_require__(1)
-
-// through
-//
-// a stream that does nothing but re-emit the input.
-// useful for aggregating a series of changing but not ending streams into one stream)
-
-exports = module.exports = through
-through.through = through
-
-//create a readable writable stream.
-
-function through (write, end, opts) {
-  write = write || function (data) { this.queue(data) }
-  end = end || function () { this.queue(null) }
-
-  var ended = false, destroyed = false, buffer = [], _ended = false
-  var stream = new Stream()
-  stream.readable = stream.writable = true
-  stream.paused = false
-
-//  stream.autoPause   = !(opts && opts.autoPause   === false)
-  stream.autoDestroy = !(opts && opts.autoDestroy === false)
-
-  stream.write = function (data) {
-    write.call(this, data)
-    return !stream.paused
-  }
-
-  function drain() {
-    while(buffer.length && !stream.paused) {
-      var data = buffer.shift()
-      if(null === data)
-        return stream.emit('end')
-      else
-        stream.emit('data', data)
-    }
-  }
-
-  stream.queue = stream.push = function (data) {
-//    console.error(ended)
-    if(_ended) return stream
-    if(data === null) _ended = true
-    buffer.push(data)
-    drain()
-    return stream
-  }
-
-  //this will be registered as the first 'end' listener
-  //must call destroy next tick, to make sure we're after any
-  //stream piped from here.
-  //this is only a problem if end is not emitted synchronously.
-  //a nicer way to do this is to make sure this is the last listener for 'end'
-
-  stream.on('end', function () {
-    stream.readable = false
-    if(!stream.writable && stream.autoDestroy)
-      process.nextTick(function () {
-        stream.destroy()
-      })
-  })
-
-  function _end () {
-    stream.writable = false
-    end.call(stream)
-    if(!stream.readable && stream.autoDestroy)
-      stream.destroy()
-  }
-
-  stream.end = function (data) {
-    if(ended) return
-    ended = true
-    if(arguments.length) stream.write(data)
-    _end() // will emit or queue
-    return stream
-  }
-
-  stream.destroy = function () {
-    if(destroyed) return
-    destroyed = true
-    ended = true
-    buffer.length = 0
-    stream.writable = stream.readable = false
-    stream.emit('close')
-    return stream
-  }
-
-  stream.pause = function () {
-    if(stream.paused) return
-    stream.paused = true
-    return stream
-  }
-
-  stream.resume = function () {
-    if(stream.paused) {
-      stream.paused = false
-      stream.emit('resume')
-    }
-    drain()
-    //may have become paused again,
-    //as drain emits 'data'.
-    if(!stream.paused)
-      stream.emit('drain')
-    return stream
-  }
-  return stream
-}
-
-
-
-/***/ }),
-/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1119,6 +998,126 @@ exports._exceptionWithHostPort = function(err,
   }
   return ex;
 };
+
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+module.exports = require("util");
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Stream = __webpack_require__(1)
+
+// through
+//
+// a stream that does nothing but re-emit the input.
+// useful for aggregating a series of changing but not ending streams into one stream)
+
+exports = module.exports = through
+through.through = through
+
+//create a readable writable stream.
+
+function through (write, end, opts) {
+  write = write || function (data) { this.queue(data) }
+  end = end || function () { this.queue(null) }
+
+  var ended = false, destroyed = false, buffer = [], _ended = false
+  var stream = new Stream()
+  stream.readable = stream.writable = true
+  stream.paused = false
+
+//  stream.autoPause   = !(opts && opts.autoPause   === false)
+  stream.autoDestroy = !(opts && opts.autoDestroy === false)
+
+  stream.write = function (data) {
+    write.call(this, data)
+    return !stream.paused
+  }
+
+  function drain() {
+    while(buffer.length && !stream.paused) {
+      var data = buffer.shift()
+      if(null === data)
+        return stream.emit('end')
+      else
+        stream.emit('data', data)
+    }
+  }
+
+  stream.queue = stream.push = function (data) {
+//    console.error(ended)
+    if(_ended) return stream
+    if(data === null) _ended = true
+    buffer.push(data)
+    drain()
+    return stream
+  }
+
+  //this will be registered as the first 'end' listener
+  //must call destroy next tick, to make sure we're after any
+  //stream piped from here.
+  //this is only a problem if end is not emitted synchronously.
+  //a nicer way to do this is to make sure this is the last listener for 'end'
+
+  stream.on('end', function () {
+    stream.readable = false
+    if(!stream.writable && stream.autoDestroy)
+      process.nextTick(function () {
+        stream.destroy()
+      })
+  })
+
+  function _end () {
+    stream.writable = false
+    end.call(stream)
+    if(!stream.readable && stream.autoDestroy)
+      stream.destroy()
+  }
+
+  stream.end = function (data) {
+    if(ended) return
+    ended = true
+    if(arguments.length) stream.write(data)
+    _end() // will emit or queue
+    return stream
+  }
+
+  stream.destroy = function () {
+    if(destroyed) return
+    destroyed = true
+    ended = true
+    buffer.length = 0
+    stream.writable = stream.readable = false
+    stream.emit('close')
+    return stream
+  }
+
+  stream.pause = function () {
+    if(stream.paused) return
+    stream.paused = true
+    return stream
+  }
+
+  stream.resume = function () {
+    if(stream.paused) {
+      stream.paused = false
+      stream.emit('resume')
+    }
+    drain()
+    //may have become paused again,
+    //as drain emits 'data'.
+    if(!stream.paused)
+      stream.emit('drain')
+    return stream
+  }
+  return stream
+}
 
 
 
@@ -2184,7 +2183,7 @@ function plural(ms, n, name) {
  */
 
 var tty = __webpack_require__(17);
-var util = __webpack_require__(2);
+var util = __webpack_require__(3);
 
 /**
  * This is the Node.js implementation of `debug()`.
@@ -2453,7 +2452,7 @@ module.exports = require("net");
 
 var Stream = __webpack_require__(1).Stream
   , es = exports
-  , through = __webpack_require__(3)
+  , through = __webpack_require__(4)
   , from = __webpack_require__(20)
   , duplex = __webpack_require__(8)
   , map = __webpack_require__(21)
@@ -3002,7 +3001,7 @@ module.exports = function (mapper, opts) {
 /***/ (function(module, exports, __webpack_require__) {
 
 //through@2 handles this by default!
-module.exports = __webpack_require__(3)
+module.exports = __webpack_require__(4)
 
 
 
@@ -3017,7 +3016,7 @@ module.exports = __webpack_require__(3)
 // the most basic reduce just emits one 'data' event after it has recieved 'end'
 
 
-var through = __webpack_require__(3)
+var through = __webpack_require__(4)
 var Decoder = __webpack_require__(24).StringDecoder
 
 module.exports = split
@@ -3137,7 +3136,7 @@ module.exports = require("buffer");
 /***/ (function(module, exports, __webpack_require__) {
 
 var CombinedStream = __webpack_require__(28);
-var util = __webpack_require__(2);
+var util = __webpack_require__(3);
 var path = __webpack_require__(9);
 var http = __webpack_require__(30);
 var https = __webpack_require__(31);
@@ -3579,7 +3578,7 @@ FormData.prototype._error = function(err) {
 /* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var util = __webpack_require__(2);
+var util = __webpack_require__(3);
 var Stream = __webpack_require__(1).Stream;
 var DelayedStream = __webpack_require__(29);
 
@@ -3774,7 +3773,7 @@ CombinedStream.prototype._emitError = function(err) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var Stream = __webpack_require__(1).Stream;
-var util = __webpack_require__(2);
+var util = __webpack_require__(3);
 
 module.exports = DelayedStream;
 function DelayedStream() {
@@ -9808,9 +9807,9 @@ module.exports = {
   ocaml: __webpack_require__(63),
   php: __webpack_require__(65),
   python: __webpack_require__(69),
-  ruby: __webpack_require__(72),
-  shell: __webpack_require__(74),
-  swift: __webpack_require__(78)
+  ruby: __webpack_require__(74),
+  shell: __webpack_require__(76),
+  swift: __webpack_require__(80)
 }
 
 
@@ -11786,7 +11785,10 @@ module.exports = {
   },
 
   python3: __webpack_require__(70),
-  requests: __webpack_require__(71)
+  requests: __webpack_require__(71),
+  requestMini:__webpack_require__(72),
+  simple:__webpack_require__(73)
+
 }
 
 
@@ -11906,7 +11908,7 @@ module.exports.info = {
  */
 
 
-var util=__webpack_require__(4);
+var util=__webpack_require__(2);
 
 var CodeBuilder = __webpack_require__(0)
 
@@ -12006,6 +12008,261 @@ module.exports.info = {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+/**
+ * @description
+ * HTTP code snippet generator for Python using Requests
+ *
+ * @author
+ * @montanaflynn
+ *
+ * for any questions or issues regarding the generated code snippet, please open an issue mentioning the author.
+ */
+
+
+var util=__webpack_require__(2);
+
+var CodeBuilder = __webpack_require__(0)
+
+module.exports = function (source, options) {
+  // Start snippet
+  var code = new CodeBuilder('    ')
+
+  // Import requests
+  // code.push('from Suites.HttpClient import HttpClient')
+  //     .blank()
+  // code.push('def test_at(time):')
+  //   .blank()
+
+
+  // Set URL URL_BASE_CRM + SwaggerURL.bind("/specialEvent/copy/1")
+  code.push('url = BASE_URL + SwaggerURL.bind("%s")', source.url)
+      .blank()
+
+  // Construct query string
+  if (source.queryString.length) {
+    var qs = 'querystring = ' + JSON.stringify(source.queryObj)
+
+    code.push(qs)
+        .blank()
+  }
+
+  // Construct payload
+  var payload = JSON.stringify(source.postData.text)
+  var jsonData= parsedText(source.postData.text)
+
+  if (payload) {
+    code.push('json = %s', jsonData)
+  }
+
+  // Construct headers
+  var header
+  var headers = source.allHeaders
+  var headerCount = Object.keys(headers).length
+
+  if (headerCount === 1) {
+    for (header in headers) {
+      code.push('headers = {\'%s\': \'%s\'}', header, headers[header])
+          .blank()
+    }
+  } else if (headerCount > 1) {
+    // var count = 1
+    //
+     code.push('headers = LOGIN_HEADERS')
+    //
+    // for (header in headers) {
+    //   if (count++ !== headerCount) {
+    //     code.push(1, '\'%s\': "%s",', header, headers[header])
+    //   } else {
+    //     code.push(1, '\'%s\': "%s"', header, headers[header])
+    //   }
+    // }
+    //
+    // code.push(1, '}')
+    //     .blank()
+  }
+
+  // Construct request
+  var method = source.method
+  var request = util.format('response = HttpClient.client.request("%s", url', method)
+
+  if (payload) {
+    request += ', json=json'
+  }
+
+  if (headerCount > 0) {
+    request += ', headers=headers'
+  }
+
+  if (qs) {
+    request += ', params=querystring'
+  }
+
+  request += ')'
+
+  code.push(request)
+      .blank()
+
+      // Print response
+      .push('print(response.text)')
+
+  return code.join()
+}
+
+module.exports.info = {
+  key: 'requests',
+  title: 'Requests',
+  link: 'http://docs.python-requests.org/en/latest/api/#requests.request',
+  description: 'Requests HTTP library'
+}
+
+// response = requests.request("POST", url, data=payload, headers=headers, params=querystring)
+function  parsedText(text) {
+  try{
+    if(text!=null){
+      return JSON.stringify(JSON.parse(text),0,4)
+    }
+  }catch (e){
+    return text
+  }
+}
+
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * @description
+ * HTTP code snippet generator for Python using Requests
+ *
+ * @author
+ * @montanaflynn
+ *
+ * for any questions or issues regarding the generated code snippet, please open an issue mentioning the author.
+ */
+
+
+var util = __webpack_require__(2);
+
+var CodeBuilder = __webpack_require__(0)
+
+module.exports = function (source, options) {
+  // Start snippet
+  var code = new CodeBuilder('    ')
+
+  // Import requests
+  // code.push('from Suites.HttpClient import HttpClient')
+  //     .blank()
+  // code.push('def test_at(time):')
+  //   .blank()
+
+
+  // Set URL URL_BASE_CRM + SwaggerURL.bind("/specialEvent/copy/1")
+  // code.push('url = BASE_URL + SwaggerURL.bind("%s")', source.url)
+  //     .blank()
+
+  // Construct query string
+  if (source.queryString.length) {
+    var qs = 'data = ' + JSON.stringify(source.queryObj, null, 4)
+
+    code.push(qs)
+      .blank()
+  }
+
+  // Construct payload
+  var payload = JSON.stringify(source.postData.text)
+  var jsonData = parsedText(source.postData.text)
+
+  if (payload) {
+    code.push('json = %s', jsonData)
+  }
+
+  // Construct headers
+  var header
+  var headers = source.allHeaders
+  var headerCount = Object.keys(headers).length
+
+  if (headerCount === 1) {
+    for (header in headers) {
+      code.push('headers = {\'%s\': \'%s\'}', header, headers[header])
+        .blank()
+    }
+  } else if (headerCount > 1) {
+    // var count = 1
+    //
+    // code.push('headers = LOGIN_HEADERS')
+    //
+    // for (header in headers) {
+    //   if (count++ !== headerCount) {
+    //     code.push(1, '\'%s\': "%s",', header, headers[header])
+    //   } else {
+    //     code.push(1, '\'%s\': "%s"', header, headers[header])
+    //   }
+    // }
+    //
+    // code.push(1, '}')
+    //     .blank()
+  }
+
+  // Construct request
+  var method = source.method
+
+  var request = util.format('json = %s("%s", data)', method.toLocaleUpperCase(), source.url)
+
+
+  if (headerCount > 0) {
+    //  request += ', headers=headers'
+  }
+
+  if (qs) {
+    //  request += ', params=querystring'
+  }
+
+  //request += ')'
+
+  code.push(request)
+    .blank()
+
+    // Print response
+    .push('jsonContain(json,{"code": 0,"msg":"OK"})')
+    .blank()
+
+
+  if (source.response) {
+    if (String === source.response.constructor)
+      code.push("# response example:"+source.response)
+    else
+      code.push("# response example:"+JSON.stringify(source.response))
+  }
+
+  return code.join()
+}
+
+module.exports.info = {
+  key: 'requests',
+  title: 'Requests',
+  link: 'http://docs.python-requests.org/en/latest/api/#requests.request',
+  description: 'Requests HTTP library'
+}
+
+// response = requests.request("POST", url, data=payload, headers=headers, params=querystring)
+function parsedText(text) {
+  try {
+    if (text != null) {
+      return JSON.stringify(JSON.parse(text), 0, 4)
+    }
+  } catch (e) {
+    return text
+  }
+}
+
+
+/***/ }),
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 
 
 module.exports = {
@@ -12016,12 +12273,12 @@ module.exports = {
     default: 'native'
   },
 
-  native: __webpack_require__(73)
+  native: __webpack_require__(75)
 }
 
 
 /***/ }),
-/* 73 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12089,7 +12346,7 @@ module.exports.info = {
 
 
 /***/ }),
-/* 74 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12103,14 +12360,14 @@ module.exports = {
     default: 'curl'
   },
 
-  curl: __webpack_require__(75),
-  httpie: __webpack_require__(76),
-  wget: __webpack_require__(77)
+  curl: __webpack_require__(77),
+  httpie: __webpack_require__(78),
+  wget: __webpack_require__(79)
 }
 
 
 /***/ }),
-/* 75 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12126,7 +12383,7 @@ module.exports = {
 
 
 
-var util=__webpack_require__(4);
+var util=__webpack_require__(2);
 
 var helpers = __webpack_require__(5)
 var CodeBuilder = __webpack_require__(0)
@@ -12209,7 +12466,7 @@ module.exports.info = {
 
 
 /***/ }),
-/* 76 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12338,7 +12595,7 @@ module.exports.info = {
 
 
 /***/ }),
-/* 77 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12398,7 +12655,7 @@ module.exports.info = {
 
 
 /***/ }),
-/* 78 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12412,12 +12669,12 @@ module.exports = {
     default: 'nsurlsession'
   },
 
-  nsurlsession: __webpack_require__(79)
+  nsurlsession: __webpack_require__(81)
 }
 
 
 /***/ }),
-/* 79 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12433,7 +12690,7 @@ module.exports = {
 
 
 
-var helpers = __webpack_require__(80)
+var helpers = __webpack_require__(82)
 var CodeBuilder = __webpack_require__(0)
 
 module.exports = function (source, options) {
@@ -12562,7 +12819,7 @@ module.exports.info = {
 
 
 /***/ }),
-/* 80 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

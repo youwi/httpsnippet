@@ -49,6 +49,8 @@
     "quick": "mocha --no-timeouts --fgrep 'Request Validation' --invert",
     "pretest": "standard && echint",
     "test": "mocha --no-timeouts",
+    "pack-fe":"webpack src/index.js --output-filename dist/httpsnippet-dist.js",
+    "pack-node":"webpack src/index.js --target=node --output-filename dist/httpsnippet-dist-node.js",
     "posttest": "npm run coverage",
     "coverage": "istanbul cover --dir coverage _mocha -- --fgrep 'Request Validation' --invert -R dot",
     "codeclimate": "codeclimate < coverage/lcov.info"
